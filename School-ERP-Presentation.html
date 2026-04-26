@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>School ERP Presentation</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-deep: #f7faff;
+      --surface: rgba(255, 255, 255, 0.97);
+      --surface-strong: #ffffff;
+      --ink: #10264a;
+      --muted: #60779d;
+      --line: rgba(34, 88, 196, 0.12);
+      --blue: #215bdb;
+      --blue-strong: #133b9d;
+      --blue-soft: rgba(33, 91, 219, 0.1);
+      --cyan: #55a7ff;
+      --teal: #0ea5a3;
+      --shadow-xl: 0 30px 90px rgba(18, 44, 99, 0.14);
+      --shadow-lg: 0 18px 46px rgba(18, 44, 99, 0.12);
+      --shadow-md: 0 10px 24px rgba(18, 44, 99, 0.08);
+      --r-xl: 36px;
+      --r-lg: 26px;
+      --r-md: 18px;
+      --r-sm: 14px;
+      --content: 1380px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(85, 167, 255, 0.07), transparent 24%),
+        radial-gradient(circle at top right, rgba(33, 91, 219, 0.06), transparent 22%),
+        linear-gradient(180deg, #ffffff 0%, #fcfdff 52%, var(--bg-deep) 100%);
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 50%;
+      filter: blur(10px);
+      animation: drift 18s ease-in-out infinite;
+    }
+
+    body::before {
+      top: -120px;
+      left: -80px;
+      width: 340px;
+      height: 340px;
+      background: rgba(85, 167, 255, 0.08);
+    }
+
+    body::after {
+      right: -80px;
+      bottom: 8%;
+      width: 380px;
+      height: 380px;
+      background: rgba(33, 91, 219, 0.07);
+      animation-delay: 3s;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(100%, var(--content));
+      margin: 0 auto;
+      padding: 18px 18px 90px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 14px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 14px 28px rgba(33, 91, 219, 0.24);
+      flex: 0 0 auto;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 0.98rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .nav-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: white;
+      font-size: 1.1rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--ink);
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.88);
+      font-size: 0.92rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      color: var(--blue);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 18px rgba(33, 91, 219, 0.1);
+    }
+
+    .section {
+      position: relative;
+      margin-top: 18px;
+      scroll-margin-top: 96px;
+      padding: 34px;
+      border-radius: var(--r-xl);
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.74);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(255,255,255,0.18), transparent 30%, rgba(85, 167, 255, 0.05) 100%);
+      pointer-events: none;
+    }
+
+    .hero {
+      min-height: calc(100vh - 110px);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-stage {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      margin-top: 18px;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      max-width: 10ch;
+    }
+
+    .lead {
+      margin-top: 18px;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 170px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 18px 30px rgba(33, 91, 219, 0.22);
+    }
+
+    .button.secondary {
+      color: var(--blue-strong);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.9);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: var(--r-md);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .metric:nth-child(2) { animation-delay: 1.4s; }
+    .metric:nth-child(3) { animation-delay: 2.8s; }
+
+    .metric strong {
+      display: block;
+      color: var(--blue-strong);
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero-stage {
+      display: grid;
+      gap: 14px;
+      align-content: center;
+    }
+
+    .stage-card {
+      padding: 22px;
+      border-radius: var(--r-lg);
+      background: linear-gradient(160deg, rgba(255,255,255,0.95), rgba(234,243,255,0.92));
+      border: 1px solid rgba(33, 91, 219, 0.12);
+      box-shadow: var(--shadow-lg);
+      transform-origin: center;
+      animation: slideGlow 8s ease-in-out infinite;
+    }
+
+    .stage-card:nth-child(2) { animation-delay: 1.3s; }
+    .stage-card:nth-child(3) { animation-delay: 2.6s; }
+    .stage-card:nth-child(4) { animation-delay: 3.9s; }
+
+    .stage-card strong {
+      display: block;
+      font-size: 1.02rem;
+      color: var(--blue-strong);
+      margin-bottom: 8px;
+    }
+
+    .stage-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .section-head {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 22px;
+    }
+
+    .section-tag {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.76rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      max-width: 20ch;
+    }
+
+    .section-head p {
+      margin: 12px 0 0;
+      max-width: 78ch;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .compact-title h2 {
+      max-width: 13ch;
+    }
+
+    .grid-3,
+    .grid-4,
+    .grid-2 {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      padding: 24px;
+      border-radius: var(--r-lg);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+      transition: transform 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card .icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      margin-bottom: 16px;
+      box-shadow: 0 14px 24px rgba(33, 91, 219, 0.18);
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
+    }
+
+    .card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    .flow-card {
+      min-height: 230px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(241,247,255,0.92));
+    }
+
+    .step {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+    }
+
+    .message-card {
+      overflow: hidden;
+    }
+
+    .message-card::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 4px;
+      margin-top: 20px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--teal));
+      background-size: 200% 100%;
+      animation: pulseLine 6s linear infinite;
+    }
+
+    .ai-panel {
+      padding: 28px;
+      border-radius: var(--r-lg);
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .ai-primary {
+      color: white;
+      background: linear-gradient(145deg, #1747b1 0%, #2258d9 55%, #4d8dff 100%);
+    }
+
+    .ai-primary p,
+    .ai-primary li {
+      color: rgba(255,255,255,0.98);
+    }
+
+    .ai-primary h3 {
+      color: #ffffff;
+    }
+
+    .ai-secondary {
+      background: rgba(255,255,255,0.92);
+    }
+
+    .ai-panel ul {
+      margin: 18px 0 0;
+      padding-left: 18px;
+    }
+
+    .ai-panel li {
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+
+    .role-card ul {
+      margin: 16px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .role-card li {
+      margin-bottom: 8px;
+    }
+
+    .finale {
+      text-align: center;
+      min-height: min(78vh, 760px);
+      display: grid;
+      place-items: center;
+    }
+
+    .finale-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+    }
+
+    .finale h2 {
+      max-width: none;
+      font-size: clamp(2.3rem, 6vw, 4.9rem);
+    }
+
+    .finale p {
+      margin: 18px auto 0;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(42px, 26px, 0) scale(1.04); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    @keyframes slideGlow {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.01); }
+    }
+
+    @keyframes pulseLine {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        padding: 14px 14px 70px;
+      }
+
+      .topbar {
+        align-items: center;
+        border-radius: 24px;
+      }
+
+      .nav-toggle {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .nav {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        display: none;
+        padding: 12px;
+        border-radius: 24px;
+        background: rgba(255,255,255,0.95);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .topbar.open .nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero,
+      .grid-4,
+      .grid-3,
+      .grid-2,
+      .hero-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .section {
+        padding: 24px 18px;
+        border-radius: 28px;
+      }
+
+      h1 {
+        max-width: none;
+        font-size: clamp(2.5rem, 11vw, 4.1rem);
+      }
+
+      h2 {
+        max-width: none;
+        font-size: clamp(1.85rem, 9vw, 3rem);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .brand-copy strong {
+        font-size: 0.92rem;
+      }
+
+      .brand-copy span {
+        font-size: 0.78rem;
+      }
+
+      .topbar.open .nav {
+        grid-template-columns: 1fr;
+      }
+
+      .nav a {
+        text-align: center;
+      }
+
+      .card,
+      .ai-panel,
+      .stage-card,
+      .metric {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar" id="topbar">
+      <div class="brand">
+        <div class="brand-mark">SM</div>
+        <div class="brand-copy">
+          <strong>School ERP Presentation</strong>
+          <span>Blue and white animated executive flow</span>
+        </div>
+      </div>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation">Menu</button>
+      <nav class="nav" id="nav">
+        <a href="#overview">Overview</a>
+        <a href="#features">Features</a>
+        <a href="#automation">Automation</a>
+        <a href="#ai">AI</a>
+        <a href="#flow">Flow</a>
+        <a href="#roles">Roles</a>
+        <a href="#benefits">Benefits</a>
+      </nav>
+    </header>
+
+    <section class="section hero reveal" id="overview">
+      <div class="hero-copy">
+        <div class="eyebrow">School Management Platform</div>
+        <h1>One digital system for your complete school operation.</h1>
+        <p class="lead">
+          We provide a modern, fully responsive school management platform for admissions, academics, communication, fee collection,
+          staff operations, examinations, branch administration, and management visibility.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#features">View Features</a>
+          <a class="button secondary" href="#flow">See How It Works</a>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <strong>Multi-Branch</strong>
+            <span>One school can manage multiple branches with clean operational control.</span>
+          </div>
+          <div class="metric">
+            <strong>Automated</strong>
+            <span>Reminders, notices, homework, and event communication can run automatically.</span>
+          </div>
+          <div class="metric">
+            <strong>Responsive</strong>
+            <span>Designed to work clearly across mobile, desktop, XL, 2XL, and large presentation screens.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stage">
+        <div class="stage-card">
+          <strong>Admissions and student lifecycle</strong>
+          <p>From first admission to promotion, class movement, fee tracking, and academic continuity.</p>
+        </div>
+        <div class="stage-card">
+          <strong>Branch-wise operations</strong>
+          <p>Every branch can run independently while management still gets central visibility.</p>
+        </div>
+        <div class="stage-card">
+          <strong>Parent and student communication</strong>
+          <p>Automatic fee reminders, exam timetable updates, homework, event circulars, and notices.</p>
+        </div>
+        <div class="stage-card">
+          <strong>AI-assisted decision support</strong>
+          <p>Authorized users can chat with school data and retrieve operational answers quickly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="features">
+      <div class="section-head">
+        <div class="section-tag">What We Provide</div>
+        <h2>Feature coverage built for school operations</h2>
+        <p>The platform is positioned as a complete management system, not just a student database or fee tool.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="icon">01</div>
+          <h3>School and branch management</h3>
+          <p>Create schools, open branches, control branch-level users, apply branding, and manage institution structure cleanly.</p>
+        </article>
+        <article class="card">
+          <div class="icon">02</div>
+          <h3>Admissions and student records</h3>
+          <p>Handle admission details, parent information, class assignment, student identity, and academic continuity.</p>
+        </article>
+        <article class="card">
+          <div class="icon">03</div>
+          <h3>Employees, teachers, and departments</h3>
+          <p>Manage departments, designations, employee onboarding, teacher setup, and role-specific responsibilities.</p>
+        </article>
+        <article class="card">
+          <div class="icon">04</div>
+          <h3>Academic setup</h3>
+          <p>Boards, academic years, classes, sections, subjects, and examination structure can be configured clearly.</p>
+        </article>
+        <article class="card">
+          <div class="icon">05</div>
+          <h3>Fees and receipt management</h3>
+          <p>Define fee structures by academic year or class, collect payments, track pending amounts, and generate receipts.</p>
+        </article>
+        <article class="card">
+          <div class="icon">06</div>
+          <h3>Timetable and exams</h3>
+          <p>Manage class timetables, exam schedules, teacher assignments, and academic operations in one place.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="automation">
+      <div class="section-head">
+        <div class="section-tag">Communication Automation</div>
+        <h2>Automatic communication for parents, staff, and students</h2>
+        <p>This platform can reduce manual calls, repetitive follow-up, and scattered message groups by centralizing communication.</p>
+      </div>
+      <div class="grid-2">
+        <article class="card message-card">
+          <div class="icon">F</div>
+          <h3>Fee reminders</h3>
+          <p>Send due-date reminders, overdue alerts, installment follow-up, and payment confirmation messages automatically.</p>
+        </article>
+        <article class="card message-card">
+          <div class="icon">E</div>
+          <h3>Exam timetable updates</h3>
+          <p>Inform students and parents about exam schedules, reschedules, subject timings, and exam notices on time.</p>
+        </article>
+        <article class="card message-card">
+          <div class="icon">H</div>
+          <h3>Daily work and homework</h3>
+          <p>Teachers can share daily classwork, homework, practice instructions, and revision tasks through a structured channel.</p>
+        </article>
+        <article class="card message-card">
+          <div class="icon">N</div>
+          <h3>Event invitations and notices</h3>
+          <p>Annual day, parent meetings, sports day, holidays, circulars, and branch events can be communicated centrally.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="ai">
+      <div class="section-head compact-title">
+        <div class="section-tag">AI Layer</div>
+        <h2>AI support for school questions and quick answers</h2>
+        <p>We can provide an AI assistant so authorized users can ask school-related questions and get fast, simple answers from the system.</p>
+      </div>
+      <div class="grid-2">
+        <article class="ai-panel ai-primary">
+          <h3>What the AI assistant can do</h3>
+          <ul>
+            <li>Answer fee questions branch-wise</li>
+            <li>Find student or staff records quickly</li>
+            <li>Show admission and academic summaries</li>
+            <li>Search school documents and past records</li>
+            <li>Help management with quick insights</li>
+          </ul>
+        </article>
+        <article class="ai-panel ai-secondary">
+          <h3>Simple questions management can ask</h3>
+          <ul>
+            <li>Which students have pending fees this month?</li>
+            <li>How many admissions were completed in each branch?</li>
+            <li>Which teachers are assigned to Grade 8?</li>
+            <li>What events are scheduled this week?</li>
+            <li>Show current academic year class-wise student counts.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="flow">
+      <div class="section-head">
+        <div class="section-tag">How We Work</div>
+        <h2>Clear implementation and usage flow</h2>
+        <p>The system is designed to be rolled out in a simple and understandable order for school management teams.</p>
+      </div>
+      <div class="grid-4">
+        <article class="card flow-card">
+          <div class="step">Step 1</div>
+          <h3>Create school and branch</h3>
+          <p>Start with school profile, branch details, logo, colors, and the first admin setup.</p>
+        </article>
+        <article class="card flow-card">
+          <div class="step">Step 2</div>
+          <h3>Configure academic structure</h3>
+          <p>Create boards, academic years, departments, classes, sections, and subjects in the right sequence.</p>
+        </article>
+        <article class="card flow-card">
+          <div class="step">Step 3</div>
+          <h3>Onboard people</h3>
+          <p>Add employees, teachers, admission staff, students, and map them to the correct branch and role.</p>
+        </article>
+        <article class="card flow-card">
+          <div class="step">Step 4</div>
+          <h3>Go live with operations</h3>
+          <p>Run admissions, fees, communications, timetable, exams, reports, and management dashboards.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="roles">
+      <div class="section-head">
+        <div class="section-tag">Role-Wise Value</div>
+        <h2>Each role gets the right access and the right screens</h2>
+        <p>The platform is designed around real school responsibilities so management, admins, and staff can work clearly.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card role-card">
+          <div class="icon">M</div>
+          <h3>Management / Super Admin</h3>
+          <ul>
+            <li>Create schools and branches</li>
+            <li>Review all branch operations</li>
+            <li>Monitor fees, students, staff, and structure</li>
+            <li>Use AI-assisted reporting visibility</li>
+          </ul>
+        </article>
+        <article class="card role-card">
+          <div class="icon">A</div>
+          <h3>School / Branch Admin</h3>
+          <ul>
+            <li>Configure academics and branch masters</li>
+            <li>Manage employees, teachers, and students</li>
+            <li>Run fee, timetable, and exam operations</li>
+            <li>Control branch-level workflows</li>
+          </ul>
+        </article>
+        <article class="card role-card">
+          <div class="icon">S</div>
+          <h3>Staff / Parents / Students</h3>
+          <ul>
+            <li>Teachers manage classwork and updates</li>
+            <li>Admission staff handle onboarding</li>
+            <li>Accountants manage collections and receipts</li>
+            <li>Parents and students receive timely information</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="benefits">
+      <div class="section-head">
+        <div class="section-tag">Why It Matters</div>
+        <h2>What the school gains from the platform</h2>
+        <p>The platform improves administration, communication, visibility, and institutional discipline across branches.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="icon">C</div>
+          <h3>Cleaner operations</h3>
+          <p>Less dependency on spreadsheets, repeated entries, and disconnected follow-up processes.</p>
+        </article>
+        <article class="card">
+          <div class="icon">V</div>
+          <h3>Better visibility</h3>
+          <p>Leadership can review branch performance, fee tracking, admissions, and staffing more clearly.</p>
+        </article>
+        <article class="card">
+          <div class="icon">P</div>
+          <h3>Professional presentation</h3>
+          <p>Branded receipts, organized records, and standardized operations strengthen the school’s public image.</p>
+        </article>
+        <article class="card">
+          <div class="icon">G</div>
+          <h3>Scalable growth</h3>
+          <p>New branches can be added under the same school model without rebuilding the operational structure.</p>
+        </article>
+        <article class="card">
+          <div class="icon">R</div>
+          <h3>Responsive access</h3>
+          <p>Management and staff can use the platform across mobile and desktop without losing usability.</p>
+        </article>
+        <article class="card">
+          <div class="icon">I</div>
+          <h3>Future-ready intelligence</h3>
+          <p>AI, messaging automation, and centralized records create a stronger long-term digital foundation.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section finale reveal">
+      <div class="finale-inner">
+        <div class="section-tag">Presentation Close</div>
+        <h2>A complete school operations platform with automation, visibility, and future-ready AI capability.</h2>
+        <p>
+          This solution is designed to help school management run branches better, communicate faster, reduce manual work,
+          and create a more professional and scalable operating model.
+        </p>
+        <div class="hero-actions" style="justify-content:center;">
+          <a class="button primary" href="#overview">Restart Presentation</a>
+          <a class="button secondary" href="#features">Review Features</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal').forEach((node) => revealObserver.observe(node));
+
+    const topbar = document.getElementById('topbar');
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = Array.from(document.querySelectorAll('.nav a'));
+    const sections = navLinks
+      .map((link) => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    navToggle.addEventListener('click', () => {
+      topbar.classList.toggle('open');
+    });
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        topbar.classList.remove('open');
+      });
+    });
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      const visible = entries.find((entry) => entry.isIntersecting);
+      if (!visible) {
+        return;
+      }
+
+      navLinks.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`);
+      });
+    }, { threshold: 0.45 });
+
+    sections.forEach((section) => sectionObserver.observe(section));
+  </script>
+</body>
+</html>
